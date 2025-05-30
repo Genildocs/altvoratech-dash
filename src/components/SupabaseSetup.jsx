@@ -1,6 +1,6 @@
 import { AlertCircle, Check, Copy, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
-import Footer from './Footer';
+import { Footer } from './';
 
 const SupabaseSetup = () => {
   const [copied, setCopied] = useState(false);

@@ -5,10 +5,7 @@ import {
   BrowserRouter as Router,
   Routes,
 } from 'react-router-dom';
-import AuthForm from './components/AuthForm';
-import Footer from './components/Footer';
-import Navbar from './components/Navbar';
-import SupabaseSetup from './components/SupabaseSetup';
+import { AuthForm, Footer, Navbar, SupabaseSetup } from './components';
 import { AuthProvider, useAuth } from './hooks/useAuth.jsx';
 import Dashboard from './pages/Dashboard';
 import NewProject from './pages/NewProject';

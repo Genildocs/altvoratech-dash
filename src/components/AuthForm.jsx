@@ -1,6 +1,7 @@
 import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
+import { Footer } from './';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);

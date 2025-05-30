@@ -1,7 +1,7 @@
-import { Heart } from 'lucide-react'
+import { Heart } from 'lucide-react';
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-white border-t border-gray-200 mt-auto">
@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export { Footer as default };
