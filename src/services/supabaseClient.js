@@ -86,7 +86,7 @@ export const tasksService = {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data;
+    return data || [];
   },
 
   // Create a new task
@@ -119,5 +119,23 @@ export const tasksService = {
     const { error } = await supabase.from('tasks').delete().eq('id', id);
 
     if (error) throw error;
+  },
+
+  // Update task order (temporarily disabled - requires sort_order column)
+  async updateTaskOrder(taskId, newOrder) {
+    // TODO: Add sort_order column to tasks table in Supabase
+    console.log(
+      'Task reordering temporarily disabled - sort_order column needed'
+    );
+    return true;
+  },
+
+  // Bulk update task orders (temporarily disabled - requires sort_order column)
+  async updateTasksOrder(updates) {
+    // TODO: Add sort_order column to tasks table in Supabase
+    console.log(
+      'Task reordering temporarily disabled - sort_order column needed'
+    );
+    return true;
   },
 };

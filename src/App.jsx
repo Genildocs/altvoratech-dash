@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { AuthForm, Footer, Navbar, SupabaseSetup } from './components';
 import { AuthProvider, useAuth } from './hooks/useAuth.jsx';
+import { ThemeProvider } from './hooks/useTheme.jsx';
 import Dashboard from './pages/Dashboard';
 import NewProject from './pages/NewProject';
 import ProjectDetails from './pages/ProjectDetails';
@@ -51,7 +52,7 @@ const PublicRoute = ({ children }) => {
 // App Layout Component
 const AppLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors">
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />
@@ -66,89 +67,91 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
-            {/* Public Routes */}
-            <Route
-              path="/auth"
-              element={
-                <PublicRoute>
-                  <AuthForm />
-                </PublicRoute>
-              }
-            />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="App">
+            <Routes>
+              {/* Public Routes */}
+              <Route
+                path="/auth"
+                element={
+                  <PublicRoute>
+                    <AuthForm />
+                  </PublicRoute>
+                }
+              />
 
-            {/* Protected Routes */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Dashboard />
-                  </AppLayout>
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <AppLayout>
+                      <Dashboard />
+                    </AppLayout>
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/dashboard/new-project"
-              element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <NewProject />
-                  </AppLayout>
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/dashboard/new-project"
+                element={
+                  <ProtectedRoute>
+                    <AppLayout>
+                      <NewProject />
+                    </AppLayout>
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/project/:id"
-              element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <ProjectDetails />
-                  </AppLayout>
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/project/:id"
+                element={
+                  <ProtectedRoute>
+                    <AppLayout>
+                      <ProjectDetails />
+                    </AppLayout>
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Default redirect */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              {/* Default redirect */}
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-            {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
+              {/* Catch all route */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
 
-          {/* Toast notifications */}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#10b981',
-                  secondary: '#fff',
-                },
-              },
-              error: {
+            {/* Toast notifications */}
+            <Toaster
+              position="top-right"
+              toastOptions={{
                 duration: 4000,
-                iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
+                style: {
+                  background: '#363636',
+                  color: '#fff',
                 },
-              },
-            }}
-          />
-        </div>
-      </Router>
-    </AuthProvider>
+                success: {
+                  duration: 3000,
+                  iconTheme: {
+                    primary: '#10b981',
+                    secondary: '#fff',
+                  },
+                },
+                error: {
+                  duration: 4000,
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#fff',
+                  },
+                },
+              }}
+            />
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

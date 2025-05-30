@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.tasks (
     project_id UUID REFERENCES public.projects(id) ON DELETE CASCADE NOT NULL,
     title VARCHAR(255) NOT NULL,
     done BOOLEAN DEFAULT false NOT NULL,
+    sort_order INTEGER DEFAULT 0 NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -32,6 +33,7 @@ CREATE INDEX IF NOT EXISTS projects_created_at_idx ON public.projects(created_at
 CREATE INDEX IF NOT EXISTS tasks_project_id_idx ON public.tasks(project_id);
 CREATE INDEX IF NOT EXISTS tasks_done_idx ON public.tasks(done);
 CREATE INDEX IF NOT EXISTS tasks_created_at_idx ON public.tasks(created_at);
+CREATE INDEX IF NOT EXISTS tasks_sort_order_idx ON public.tasks(project_id, sort_order);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
@@ -54,8 +56,8 @@ CREATE POLICY "Users can delete their own projects" ON public.projects
 CREATE POLICY "Users can view tasks from their projects" ON public.tasks
     FOR SELECT USING (
         EXISTS (
-            SELECT 1 FROM public.projects 
-            WHERE projects.id = tasks.project_id 
+            SELECT 1 FROM public.projects
+            WHERE projects.id = tasks.project_id
             AND projects.user_id = auth.uid()
         )
     );
@@ -63,8 +65,8 @@ CREATE POLICY "Users can view tasks from their projects" ON public.tasks
 CREATE POLICY "Users can insert tasks in their projects" ON public.tasks
     FOR INSERT WITH CHECK (
         EXISTS (
-            SELECT 1 FROM public.projects 
-            WHERE projects.id = tasks.project_id 
+            SELECT 1 FROM public.projects
+            WHERE projects.id = tasks.project_id
             AND projects.user_id = auth.uid()
         )
     );
@@ -72,8 +74,8 @@ CREATE POLICY "Users can insert tasks in their projects" ON public.tasks
 CREATE POLICY "Users can update tasks in their projects" ON public.tasks
     FOR UPDATE USING (
         EXISTS (
-            SELECT 1 FROM public.projects 
-            WHERE projects.id = tasks.project_id 
+            SELECT 1 FROM public.projects
+            WHERE projects.id = tasks.project_id
             AND projects.user_id = auth.uid()
         )
     );
@@ -81,8 +83,8 @@ CREATE POLICY "Users can update tasks in their projects" ON public.tasks
 CREATE POLICY "Users can delete tasks from their projects" ON public.tasks
     FOR DELETE USING (
         EXISTS (
-            SELECT 1 FROM public.projects 
-            WHERE projects.id = tasks.project_id 
+            SELECT 1 FROM public.projects
+            WHERE projects.id = tasks.project_id
             AND projects.user_id = auth.uid()
         )
     );
@@ -97,12 +99,12 @@ END;
 $$ language 'plpgsql';
 
 -- Create triggers to automatically update updated_at
-CREATE TRIGGER update_projects_updated_at 
-    BEFORE UPDATE ON public.projects 
+CREATE TRIGGER update_projects_updated_at
+    BEFORE UPDATE ON public.projects
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_tasks_updated_at 
-    BEFORE UPDATE ON public.tasks 
+CREATE TRIGGER update_tasks_updated_at
+    BEFORE UPDATE ON public.tasks
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Insert sample data (optional)

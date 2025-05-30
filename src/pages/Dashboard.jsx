@@ -149,49 +149,59 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Meus Projetos
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Gerencie todos os seus projetos da ALTVORATECH HUB
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-            <div className="text-2xl font-bold text-gray-900">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {stats.total}
             </div>
-            <div className="text-sm text-gray-600">Total</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Total
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-blue-600">
               {stats.inProgress}
             </div>
-            <div className="text-sm text-gray-600">Em Progresso</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Em Progresso
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-green-600">
               {stats.completed}
             </div>
-            <div className="text-sm text-gray-600">Concluídos</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Concluídos
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-            <div className="text-2xl font-bold text-gray-600">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="text-2xl font-bold text-gray-600 dark:text-gray-300">
               {stats.planned}
             </div>
-            <div className="text-sm text-gray-600">Planejados</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Planejados
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-yellow-600">
               {stats.paused}
             </div>
-            <div className="text-sm text-gray-600">Pausados</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Pausados
+            </div>
           </div>
         </div>
 
@@ -204,7 +214,7 @@ const Dashboard = () => {
               placeholder="Buscar projetos..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-field pl-10"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
@@ -213,7 +223,7 @@ const Dashboard = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="input-field w-auto">
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-auto">
               <option value="all">Todos os Status</option>
               <option value="Planned">Planejado</option>
               <option value="In Progress">Em Progresso</option>
@@ -269,16 +279,16 @@ const Dashboard = () => {
       {/* Edit Project Modal */}
       {editingProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Editar Projeto
                 </h2>
                 <button
                   onClick={handleCloseEditModal}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                  <X className="h-5 w-5 text-gray-500" />
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+                  <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 </button>
               </div>
 

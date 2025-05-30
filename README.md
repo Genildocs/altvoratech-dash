@@ -11,8 +11,11 @@ Dashboard moderno para gerenciamento de projetos e tarefas, desenvolvido com Rea
 - **React Router** - Roteamento
 - **Lucide React** - Ícones
 - **React Hot Toast** - Notificações
+- **@dnd-kit** - Drag & drop para tarefas
 
 ## 📋 Funcionalidades
+
+### V1 - Core Features
 
 - ✅ **Autenticação** - Login e cadastro de usuários
 - ✅ **Dashboard** - Visão geral dos projetos
@@ -20,6 +23,13 @@ Dashboard moderno para gerenciamento de projetos e tarefas, desenvolvido com Rea
 - ✅ **Tarefas** - Sistema de tarefas por projeto
 - ✅ **Interface Responsiva** - Design adaptável
 - ✅ **Notificações** - Feedback visual para ações
+
+### V2 - Enhanced Features 🆕
+
+- ✅ **Dark Mode Toggle** - Tema escuro/claro com persistência
+- ✅ **Drag & Drop** - Reordenação de tarefas por arrastar e soltar
+- ✅ **Busca Melhorada** - Interface aprimorada com dark mode
+- ✅ **Filtros Avançados** - Sistema de filtros estilizado
 
 ## 🛠️ Instalação
 

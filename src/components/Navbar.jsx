@@ -1,11 +1,13 @@
-import { Home, LogOut, Menu, Plus, User, X } from 'lucide-react';
+import { Home, LogOut, Menu, Moon, Plus, Sun, User, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
+import { useTheme } from '../hooks/useTheme.jsx';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -16,7 +18,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo and brand */}
@@ -25,7 +27,7 @@ const Navbar = () => {
               <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">AV</span>
               </div>
-              <span className="font-bold text-xl text-gray-900 hidden sm:block">
+              <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">
                 ALTVORATECH DASH
               </span>
             </Link>
@@ -50,6 +52,18 @@ const Navbar = () => {
               <Plus className="h-4 w-4" />
               <span>Novo Projeto</span>
             </Link>
+
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              title={isDark ? 'Modo claro' : 'Modo escuro'}>
+              {isDark ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </button>
 
             {/* User menu */}
             <div className="flex items-center space-x-3">
@@ -121,6 +135,17 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
+
+              <button
+                onClick={toggleTheme}
+                className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors w-full text-left">
+                {isDark ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+                <span>{isDark ? 'Modo Claro' : 'Modo Escuro'}</span>
+              </button>
 
               <button
                 onClick={handleSignOut}
