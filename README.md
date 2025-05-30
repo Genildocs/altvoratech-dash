@@ -1,182 +1,112 @@
-# 🚀 ALTVORATECH DASH - Project Manager
+# ALTVORA Tech Dashboard
 
-Um painel simples e eficiente para gerenciar projetos pessoais com autenticação, to-do lists e interface moderna.
+Dashboard moderno para gerenciamento de projetos e tarefas, desenvolvido com React, Vite e Supabase.
 
-## ✨ Funcionalidades
+## 🚀 Tecnologias
 
-- 🔐 **Autenticação completa** (Login/Registro via Supabase)
-- 📋 **Gerenciamento de Projetos** (CRUD completo)
-- ✅ **Sistema de Tarefas** (To-do lists por projeto)
-- 📊 **Dashboard com estatísticas**
-- 📱 **Interface responsiva** (Mobile-first)
-- 🎨 **Design moderno** (Tailwind CSS v3)
-- ⚡ **Performance otimizada** (React 18 + Vite)
+- **React 18** - Biblioteca para interfaces de usuário
+- **Vite** - Build tool e dev server
+- **Tailwind CSS 3** - Framework CSS utilitário
+- **Supabase** - Backend as a Service (autenticação e banco de dados)
+- **React Router** - Roteamento
+- **Lucide React** - Ícones
+- **React Hot Toast** - Notificações
 
-## 🛠️ Stack Tecnológica
+## 📋 Funcionalidades
 
-- **Frontend**: React 18 + Vite
-- **Styling**: Tailwind CSS v3
-- **Routing**: React Router DOM
-- **Auth & Database**: Supabase
-- **Icons**: Lucide React
-- **Notifications**: React Hot Toast
-- **Deploy**: Vercel Ready
+- ✅ **Autenticação** - Login e cadastro de usuários
+- ✅ **Dashboard** - Visão geral dos projetos
+- ✅ **Gerenciamento de Projetos** - CRUD completo
+- ✅ **Tarefas** - Sistema de tarefas por projeto
+- ✅ **Interface Responsiva** - Design adaptável
+- ✅ **Notificações** - Feedback visual para ações
 
-## 🚀 Setup Rápido
+## 🛠️ Instalação
 
-### 1. Clone e instale dependências
+1. **Clone o repositório**
 
-```bash
-git clone <repository-url>
-cd altvoratech-dash
-npm install
-```
+   ```bash
+   git clone https://github.com/seu-usuario/altvoratech-dash.git
+   cd altvoratech-dash
+   ```
 
-### 2. Configure o Supabase
+2. **Instale as dependências**
 
-1. Crie uma conta no [Supabase](https://supabase.com)
-2. Crie um novo projeto
-3. Vá em Settings > API para obter as chaves
-4. Copie `.env.example` para `.env` e configure:
+   ```bash
+   npm install
+   ```
 
-```bash
-cp .env.example .env
-```
+3. **Configure o Supabase**
 
-```env
-VITE_SUPABASE_URL=https://seu-projeto.supabase.co
-VITE_SUPABASE_ANON_KEY=sua_chave_anonima_aqui
-```
+   - Crie um projeto no [Supabase](https://supabase.com)
+   - Execute o script SQL em `supabase-setup.sql`
+   - Crie um arquivo `.env` na raiz:
 
-### 3. Configure o banco de dados
+   ```env
+   VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+   VITE_SUPABASE_ANON_KEY=sua_chave_anonima_aqui
+   ```
 
-Execute os seguintes comandos SQL no Supabase SQL Editor:
-
-```sql
--- Criar tabela de projetos
-CREATE TABLE projects (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  description TEXT,
-  status TEXT NOT NULL DEFAULT 'Planned',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Criar tabela de tarefas
-CREATE TABLE tasks (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  done BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Habilitar Row Level Security
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
-
--- Políticas de segurança para projetos
-CREATE POLICY "Users can view own projects" ON projects
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert own projects" ON projects
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can update own projects" ON projects
-  FOR UPDATE USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can delete own projects" ON projects
-  FOR DELETE USING (auth.uid() = user_id);
-
--- Políticas de segurança para tarefas
-CREATE POLICY "Users can view tasks of own projects" ON tasks
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM projects
-      WHERE projects.id = tasks.project_id
-      AND projects.user_id = auth.uid()
-    )
-  );
-
-CREATE POLICY "Users can insert tasks in own projects" ON tasks
-  FOR INSERT WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM projects
-      WHERE projects.id = tasks.project_id
-      AND projects.user_id = auth.uid()
-    )
-  );
-
-CREATE POLICY "Users can update tasks in own projects" ON tasks
-  FOR UPDATE USING (
-    EXISTS (
-      SELECT 1 FROM projects
-      WHERE projects.id = tasks.project_id
-      AND projects.user_id = auth.uid()
-    )
-  );
-
-CREATE POLICY "Users can delete tasks in own projects" ON tasks
-  FOR DELETE USING (
-    EXISTS (
-      SELECT 1 FROM projects
-      WHERE projects.id = tasks.project_id
-      AND projects.user_id = auth.uid()
-    )
-  );
-```
-
-### 4. Execute o projeto
-
-```bash
-npm run dev
-```
-
-Acesse `http://localhost:5173` no seu navegador.
+4. **Execute o projeto**
+   ```bash
+   npm run dev
+   ```
 
 ## 📁 Estrutura do Projeto
 
 ```
 src/
 ├── components/          # Componentes reutilizáveis
-│   ├── AuthForm.jsx    # Formulário de login/registro
+│   ├── AuthForm.jsx    # Formulário de autenticação
+│   ├── Footer.jsx      # Rodapé
 │   ├── Navbar.jsx      # Barra de navegação
 │   ├── ProjectCard.jsx # Card de projeto
-│   └── TaskItem.jsx    # Item de tarefa
+│   ├── SupabaseSetup.jsx # Setup do Supabase
+│   ├── TaskItem.jsx    # Item de tarefa
+│   └── index.js        # Exportações centralizadas
 ├── hooks/              # Custom hooks
-│   └── useAuth.js      # Hook de autenticação
+│   └── useAuth.jsx     # Hook de autenticação
 ├── pages/              # Páginas da aplicação
 │   ├── Dashboard.jsx   # Dashboard principal
-│   ├── ProjectDetails.jsx # Detalhes do projeto
-│   └── NewProject.jsx  # Criar novo projeto
-├── services/           # Serviços e APIs
-│   └── supabaseClient.js # Cliente Supabase
+│   ├── NewProject.jsx  # Criação de projetos
+│   └── ProjectDetails.jsx # Detalhes do projeto
+├── services/           # Serviços externos
+│   └── supabaseClient.js # Cliente do Supabase
 ├── App.jsx            # Componente principal
-└── main.jsx           # Entry point
+└── main.jsx           # Ponto de entrada
 ```
 
-## 🎯 Como Usar
+## 🎨 Design System
 
-1. **Cadastro/Login**: Acesse a aplicação e crie sua conta
-2. **Dashboard**: Visualize todos os seus projetos e estatísticas
-3. **Criar Projeto**: Clique em "Novo Projeto" para adicionar um projeto
-4. **Gerenciar Tarefas**: Entre em um projeto para adicionar e gerenciar tarefas
-5. **Acompanhar Progresso**: Use as estatísticas para acompanhar seu progresso
+O projeto utiliza um design system baseado em:
+
+- **Cores primárias**: Azul (#3B82F6)
+- **Tipografia**: Inter (via Tailwind)
+- **Componentes**: Baseados em Tailwind CSS 3
+- **Ícones**: Lucide React
+
+## 🔧 Scripts Disponíveis
+
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Gera build de produção
+- `npm run preview` - Visualiza build de produção
+- `npm run lint` - Executa linting do código
 
 ## 🚀 Deploy
 
-### Vercel (Recomendado)
+O projeto está configurado para deploy no Vercel:
 
-1. Conecte seu repositório ao Vercel
-2. Configure as variáveis de ambiente no dashboard do Vercel
-3. Deploy automático a cada push
+1. **Conecte seu repositório** ao Vercel
+2. **Configure as variáveis de ambiente**:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+3. **Deploy automático** a cada push
 
-### Outras plataformas
+## 📄 Licença
 
-O projeto é compatível com Netlify, Railway, e outras plataformas que suportam aplicações React.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 🤝 Contribuindo
+## 👥 Contribuição
 
 1. Fork o projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
@@ -184,18 +114,10 @@ O projeto é compatível com Netlify, Railway, e outras plataformas que suportam
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📝 Licença
+## 📞 Suporte
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-## 🆘 Suporte
-
-Se você encontrar algum problema ou tiver dúvidas:
-
-1. Verifique a documentação do Supabase
-2. Confira se as variáveis de ambiente estão corretas
-3. Abra uma issue no repositório
+Para suporte, entre em contato através do email: suporte@altvora.com
 
 ---
 
-**Desenvolvido com ❤️ para a ALTVORATECH HUB**
+Desenvolvido com ❤️ pela equipe **ALTVORA**
