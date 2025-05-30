@@ -39,16 +39,17 @@ const AuthForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prevent signup - only allow login
+    if (!isLogin) {
+      return;
+    }
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
 
     try {
-      if (isLogin) {
-        await signIn(formData.email, formData.password);
-      } else {
-        await signUp(formData.email, formData.password);
-      }
+      await signIn(formData.email, formData.password);
     } catch (error) {
       console.error('Auth error:', error);
     } finally {
@@ -73,26 +74,75 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
             <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-primary-100">
               <User className="h-6 w-6 text-primary-600" />
             </div>
-            <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 dark:text-white">
               {isLogin ? 'Entre na sua conta' : 'Crie sua conta'}
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              {isLogin ? 'Não tem uma conta? ' : 'Já tem uma conta? '}
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="font-medium text-primary-600 hover:text-primary-500 transition-colors">
-                {isLogin ? 'Cadastre-se' : 'Faça login'}
-              </button>
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+              {isLogin ? (
+                <>
+                  Não tem uma conta?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setIsLogin(!isLogin)}
+                    className="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+                    Cadastre-se
+                  </button>
+                </>
+              ) : (
+                <>
+                  Já tem uma conta?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setIsLogin(!isLogin)}
+                    className="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+                    Faça login
+                  </button>
+                </>
+              )}
             </p>
           </div>
+
+          {!isLogin && (
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="h-5 w-5 text-yellow-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path
+                      fillRule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                    Funcionalidade em Implementação
+                  </h3>
+                  <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                    <p>
+                      O cadastro de novos usuários está temporariamente
+                      desabilitado. Esta funcionalidade está sendo implementada
+                      com validações de segurança aprimoradas.
+                    </p>
+                    <p className="mt-2">
+                      Para acessar o sistema, utilize as credenciais de teste ou
+                      entre em contato com o administrador.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
@@ -100,7 +150,7 @@ const AuthForm = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700">
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Email
                 </label>
                 <div className="mt-1 relative">
@@ -115,8 +165,10 @@ const AuthForm = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 ${
-                      errors.email ? 'border-red-300 focus:ring-red-500' : ''
+                    className={`w-full px-3 py-2 pl-10 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                      errors.email
+                        ? 'border-red-300 focus:ring-red-500'
+                        : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="seu@email.com"
                   />
@@ -130,7 +182,7 @@ const AuthForm = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700">
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Senha
                 </label>
                 <div className="mt-1 relative">
@@ -145,8 +197,10 @@ const AuthForm = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`input-field pl-10 pr-10 ${
-                      errors.password ? 'border-red-300 focus:ring-red-500' : ''
+                    className={`w-full px-3 py-2 pl-10 pr-10 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                      errors.password
+                        ? 'border-red-300 focus:ring-red-500'
+                        : 'border-gray-300 dark:border-gray-600'
                     }`}
                     placeholder="••••••••"
                   />
@@ -155,9 +209,9 @@ const AuthForm = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center">
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
                     )}
                   </button>
                 </div>
@@ -170,14 +224,14 @@ const AuthForm = () => {
             <div>
               <button
                 type="submit"
-                disabled={isSubmitting || loading}
+                disabled={isSubmitting || loading || !isLogin}
                 className="btn-primary w-full flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed">
                 {isSubmitting || loading ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                 ) : isLogin ? (
                   'Entrar'
                 ) : (
-                  'Cadastrar'
+                  'Cadastro Temporariamente Desabilitado'
                 )}
               </button>
             </div>
