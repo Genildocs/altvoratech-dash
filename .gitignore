@@ -37,4 +37,7 @@ coverage
 # Vercel
 .vercel
 
-.vercel
+# Documentation files (articles and project docs)
+artigo-medium.md
+medium-article-english.md
+PROJECTS_DASHBOARD.md
